@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SU_Blog::blog"
+             title="Blog"
+             module="SU_Blog"
+             sortOrder="41"
+             resource="SU_Blog::menu"
+        />
+        <add id="SU_Blog::posts"
+             title="Posts"
+             module="SU_Blog"
+             sortOrder="10"
+             resource="SU_Blog::menu"
+             parent="SU_Blog::blog"
+             action="blog/post/index"
+        />
+        <add id="SU_Blog::categories"
+             title="Categories"
+             module="SU_Blog"
+             sortOrder="20"
+             resource="SU_Blog::menu"
+             parent="SU_Blog::blog"
+             action="blog/category/index"
+        />
+        <add id="SU_Blog::tags"
+             title="Tags"
+             module="SU_Blog"
+             sortOrder="30"
+             resource="SU_Blog::menu"
+             parent="SU_Blog::blog"
+             action="blog/tag/index"
+        />
+    </menu>
+</config>

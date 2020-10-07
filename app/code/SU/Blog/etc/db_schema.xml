@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sumup_blog_post" resource="default" engine="innodb" comment="Blog Post Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Post ID"/>
+        <column xsi:type="varchar" name="title" length="255" nullable="false" comment="Post Title"/>
+        <column xsi:type="varchar" name="short_description" length="255" nullable="false" comment="Post Short Description"/>
+        <column xsi:type="text" name="description" nullable="false" comment="Post Description"/>
+        <column xsi:type="varchar" name="thumbnail" nullable="false" comment="Post Thumbnail"/>
+        <column xsi:type="varchar" name="url_key" nullable="false" comment="Post Url Key"/>
+        <column xsi:type="datetime" name="publish_date_from" nullable="false" comment="Post Date From"/>
+        <column xsi:type="datetime" name="publish_date_to" nullable="false" comment="Post Date To"/>
+        <column xsi:type="int" padding="10" name="status" nullable="false" comment="Post Status"/>
+
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Update Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+
+    <table name="sumup_blog_product_related" resource="default" engine="innodb" comment="Blog Product Related Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Blog Product Related ID"/>
+        <column xsi:type="int" name="blog_id" padding="10" unsigned="true" nullable="false" comment="Blog ID"/>
+
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product ID"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign"
+                    referenceId="BLOG_ID_FOREIGN"
+                    table="sumup_blog_product_related"
+                    column="blog_id"
+                    referenceTable="sumup_blog_post"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign"
+                    referenceId="PRODUCT_ID_FOREIGN"
+                    table="sumup_blog_product_related"
+                    column="product_id"
+                    referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SUMUP_BLOG_PRODUCT_RELATED_BLOG_ID_PRODUCT_ID">
+            <column name="blog_id"/>
+            <column name="product_id"/>
+        </constraint>
+    </table>
+
+    <table name="sumup_blog_gallery" resource="default" engine="innodb" comment="Blog Gallery Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Blog Gallery ID"/>
+        <column xsi:type="int" name="blog_id" padding="10" unsigned="true" nullable="false" comment="Blog ID"/>
+
+        <column xsi:type="varchar" name="image" length="255" nullable="false" comment="Gallery Image"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign"
+                    referenceId="BLOG_ID_FOREIGN_GALLERY"
+                    table="sumup_blog_gallery"
+                    column="blog_id"
+                    referenceTable="sumup_blog_post"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SUMUP_BLOG_GALLERY_BLOG_ID">
+            <column name="blog_id"/>
+        </constraint>
+    </table>
+
+    <table name="sumup_blog_category_entity" resource="default" engine="innodb" comment="Sumup Blog Category Entity Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="parent_id" padding="10" default="0" unsigned="true" nullable="false" comment="Parent Id"/>
+
+        <column xsi:type="varchar" name="path" length="255" nullable="false" comment="Path"/>
+
+        <column xsi:type="varchar" name="name" length="255" nullable="false" comment="Name"/>
+
+        <column xsi:type="varchar" name="url_key" nullable="false" comment="Category Url Key"/>
+
+        <column xsi:type="int" padding="10" name="status" nullable="false" comment="Category Status"/>
+
+        <column xsi:type="int" name="position" padding="10" unsigned="true" nullable="false" default="0" comment="Position"/>
+        <column xsi:type="int" name="level" padding="10" unsigned="true" nullable="false" default="0" comment="Level"/>
+        <column xsi:type="int" name="children_count" padding="10" unsigned="true" nullable="false" default="0" comment="Children count"/>
+        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" default="0" comment="Order"/>
+
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Update Time"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+
+    <table name="sumup_blog_category_post" resource="default" engine="innodb" comment="Sumup Blog Category Post Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="ID"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" comment="Category ID"/>
+
+        <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" comment="Post ID"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign"
+                    referenceId="CATEGORY_ID_FOREIGN"
+                    table="sumup_blog_category_post"
+                    column="category_id"
+                    referenceTable="sumup_blog_category_entity"
+                    referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign"
+                    referenceId="POST_ID_FOREIGN"
+                    table="sumup_blog_category_post"
+                    column="post_id"
+                    referenceTable="sumup_blog_post"
+                    referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SUMUP_BLOG_CATEGORY_POST_CATEGORY_ID_POST_ID">
+            <column name="category_id"/>
+            <column name="post_id"/>
+        </constraint>
+    </table>
+
+</schema>
